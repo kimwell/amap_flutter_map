@@ -9,7 +9,7 @@
                 <size
                     android:width="15dp"
                     android:height="15dp" />
-                <solid android:color="#ffffff" />
+                <solid android:color="@color/yellow" />
             </shape>
         </rotate>
     </item>

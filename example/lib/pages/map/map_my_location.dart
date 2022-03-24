@@ -39,12 +39,11 @@ class _BodyState extends State<_Body> {
     final AMapWidget amap = AMapWidget(
       privacyStatement: ConstConfig.amapPrivacyStatement,
       apiKey: ConstConfig.amapApiKeys,
-      myLocationStyleOptions: MyLocationStyleOptions(
-        true,
-        circleFillColor: Colors.lightBlue,
-        circleStrokeColor: Colors.blue,
-        circleStrokeWidth: 1,
-      ),
+      myLocationStyleOptions: MyLocationStyleOptions(true,
+          circleFillColor: Colors.lightBlue,
+          circleStrokeColor: Colors.blue,
+          circleStrokeWidth: 1,
+          icon: BitmapDescriptor.defaultMarker),
     );
     return Container(
       child: amap,

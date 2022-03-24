@@ -17,10 +17,10 @@
         android:background="@drawable/msg_bg"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
             <TextView
                 android:id="@+id/tv_mark_title"
@@ -30,33 +30,33 @@
                 android:maxEms="30"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tv_mark_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxEms="30"
-                android:maxLines="1"
-                android:textColor="@android:color/black"
-                android:visibility="gone"
                 android:textSize="13sp" />
 
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/img_mark_pic"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:visibility="gone"
-            tools:ignore="ContentDescription" />
+<!--            <TextView-->
+<!--                android:id="@+id/tv_mark_name"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ellipsize="end"-->
+<!--                android:maxEms="30"-->
+<!--                android:maxLines="1"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:visibility="gone"-->
+<!--                android:textSize="13sp" />-->
+
+<!--        </LinearLayout>-->
+<!--        <ImageView-->
+<!--            android:id="@+id/img_mark_pic"-->
+<!--            android:layout_width="15dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:visibility="gone"-->
+<!--            tools:ignore="ContentDescription" />-->
 
     </LinearLayout>
 
     <com.amap.flutter.map.utils.TriangleView
         android:layout_width="15dp"
         android:layout_height="10dp"
-        app:trv_color="@android:color/white"
+        app:trv_color="@color/yellow"
         app:trv_direction="bottom" />
 
 </LinearLayout>

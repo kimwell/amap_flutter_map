@@ -2,6 +2,7 @@ package com.amap.flutter.map;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -70,8 +71,8 @@ public class AMapPlatformView
             AMap amap = mapView.getMap();
             mapController = new MapController(methodChannel, mapView);
             markersController = new MarkersController(methodChannel, amap, context);
-            polylinesController = new PolylinesController(methodChannel, amap,context);
-            polygonsController = new PolygonsController(methodChannel, amap,context);
+            polylinesController = new PolylinesController(methodChannel, amap, context);
+            polygonsController = new PolygonsController(methodChannel, amap, context);
             initMyMethodCallHandlerMap();
             lifecycleProvider.getLifecycle().addObserver((LifecycleObserver) this);
         } catch (Throwable e) {
@@ -156,12 +157,30 @@ public class AMapPlatformView
     }
 
     @Override
-    public void onStart(@NonNull LifecycleOwner owner) {
+    public void onStart(@NonNull final LifecycleOwner owner) {
         LogUtil.i(CLASS_NAME, "onStart==>");
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mapView = (TextureMapView) getView();
+//                onPause(owner);
+//                onResume(owner);
+////                    if (null != mapView) {
+////                        mapView.onPause();
+////                        mapView.onResume();
+////                        onPause();
+////                    }
+//                /**
+//                 * 延时执行的代码
+//                 */
+//            }
+//        }, 10000); // 延时1秒
+
     }
 
     @Override
-    public void onResume(@NonNull LifecycleOwner owner) {
+    public void onResume(@NonNull final LifecycleOwner owner) {
         LogUtil.i(CLASS_NAME, "onResume==>");
         try {
             if (disposed) {
@@ -170,6 +189,8 @@ public class AMapPlatformView
             if (null != mapView) {
                 mapView.onResume();
             }
+
+
         } catch (Throwable e) {
             LogUtil.e(CLASS_NAME, "onResume", e);
         }

@@ -11,10 +11,11 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,11 @@ public class ConvertUtil {
 
     public static float density;
     private static String apiKey;
+    private static HashMap<String, BitmapDescriptor> mViewLruCache = new HashMap<>();
+
+    public static void clearLruCache() {
+        mViewLruCache.clear();
+    }
 
     public static void setPrivacyStatement(Context context, Object object) {
         if (null == object) {
@@ -404,30 +410,31 @@ public class ConvertUtil {
                 Log.i("APPLOG", data.get(1).toString());
                 if (data.get(1) != null) {
                     HashMap<String, Object> map = (HashMap<String, Object>) data.get(1);
-                    if (map.get("title") != null) {
-                        // 直接View 组合实现
+                    if (map.get("title") != null) {   // 直接View 组合实现
                         String text = map.get("title") + "";
-                        View view = View.inflate(context, R.layout.mark_layout, null);
-                        ImageView imageView = view.findViewById(R.id.img_mark_pic);
-                        imageView.setImageResource(android.R.drawable.btn_star);
-                        TextView textView = view.findViewById(R.id.tv_mark_name);
-                        TextView titleView = view.findViewById(R.id.tv_mark_title);
-                        titleView.setText(text);
-//                        view.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                               GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
-//                                gradientDrawable.setColor(android.R.color.holo_green_light);
-//                            }
-//                        });
                         String desc = map.get("desc") + "";
-                        if (!desc.isEmpty()) {
-                            textView.setVisibility(View.VISIBLE);
-                            textView.setText(desc);
-
+                        View view;
+                        BitmapDescriptor descriptor = mViewLruCache.get(desc.isEmpty() ? text : desc);
+                        if (descriptor != null) return descriptor;
+                        if (desc.isEmpty()) {
+                            view = View.inflate(context, R.layout.mark_layout, null);
+                            TextView titleView = view.findViewById(R.id.tv_mark_title);
+                            titleView.setText(text);
+                            descriptor = BitmapDescriptorFactory.fromView(view);
+                            mViewLruCache.put(text, descriptor);
+                        } else {
+                            view = View.inflate(context, R.layout.mark_circular_layout, null);
+                            LinearLayout linear = view.findViewById(R.id.linear);
+                            TextView titleView2 = view.findViewById(R.id.tv_title);
+                            linear.setBackground(getCircleBg(Color.parseColor("#FFC72C"), titleView2, desc));
+                            titleView2.setText(desc);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                titleView2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            }
+                            descriptor = BitmapDescriptorFactory.fromView(view);
+                            mViewLruCache.put(desc, descriptor);
                         }
-
-                        return BitmapDescriptorFactory.fromView(view);
+                        return descriptor;
                     } else {
                         throw new IllegalArgumentException(
                                 "'fromView'  arguments map map.get(\"name\") != null  ");
@@ -449,6 +456,27 @@ public class ConvertUtil {
             default:
                 throw new IllegalArgumentException("Cannot interpret " + o + " as BitmapDescriptor");
         }
+    }
+
+    /**
+     * 获取圆型背景
+     *
+     * @param colorInt 整型色值
+     */
+    static GradientDrawable getCircleBg(int colorInt, TextView textView, String text) {
+        Paint.FontMetrics fontMetrics2 = textView.getPaint().getFontMetrics();
+// 高度
+        float tH = fontMetrics2.bottom - fontMetrics2.top;
+        // 宽度
+        float w = textView.getPaint().measureText(text);
+        GradientDrawable it = new GradientDrawable();
+        it.setShape(GradientDrawable.OVAL);
+        int width = Math.round(Math.max(w, tH)) * 5 / 4;
+//        int width = (int) (Math.round(Math.max(w, tH)) * 5 / 4 + Math.round(Math.max(w, tH)) * text.length() * 0.1);
+        it.setGradientRadius(width);
+        it.setSize(width, width);
+        it.setColor(colorInt);
+        return it;
     }
 
     // Cavas 实现

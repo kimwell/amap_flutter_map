@@ -109,7 +109,7 @@ class AMapWidget extends StatefulWidget {
     Key? key,
     this.privacyStatement,
     this.apiKey,
-    this.initialCameraPosition = const CameraPosition(target: LatLng(39.909187, 116.397451), zoom: 10),
+    this.initialCameraPosition = const CameraPosition(target: LatLng(31.87558352823766, 108.12265315456773), zoom:4.0),
     this.mapType = MapType.normal,
     this.buildingsEnabled = true,
     this.compassEnabled = false,

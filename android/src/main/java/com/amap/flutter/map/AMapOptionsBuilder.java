@@ -10,6 +10,8 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.flutter.map.core.AMapOptionsSink;
 import com.amap.flutter.map.utils.LogUtil;
+import com.amap.flutter.map.utils.ConvertUtil;
+
 
 
 import java.util.List;
@@ -35,7 +37,6 @@ class AMapOptionsBuilder implements AMapOptionsSink {
     private boolean touchPoiEnabled = true;
     private boolean buildingsEnabled = true;
     private boolean labelsEnabled = true;
-    private boolean zoomGesturesEnabled = false;
 
     private float anchorX = 2.0F;
     private float anchorY = 2.0F;
@@ -53,6 +54,7 @@ class AMapOptionsBuilder implements AMapOptionsSink {
         try {
             //iOS端没有放大缩小UI, Android端强制隐藏
             options.zoomControlsEnabled(false);
+
             final AMapPlatformView aMapPlatformView = new AMapPlatformView(id, context, binaryMessenger, lifecycleProvider, options);
 
 
@@ -68,7 +70,7 @@ class AMapOptionsBuilder implements AMapOptionsSink {
                     && anchorY <= 1.0
                     && anchorY >= 0) {
 
-                aMapPlatformView.getMapController().setScreenAnchor( anchorX, anchorY);
+                aMapPlatformView.getMapController().setScreenAnchor(anchorX, anchorY);
             }
 
             aMapPlatformView.getMapController().setMinZoomLevel(minZoomLevel);
@@ -82,9 +84,8 @@ class AMapOptionsBuilder implements AMapOptionsSink {
             aMapPlatformView.getMapController().setTouchPoiEnabled(touchPoiEnabled);
             aMapPlatformView.getMapController().setBuildingsEnabled(buildingsEnabled);
             aMapPlatformView.getMapController().setLabelsEnabled(labelsEnabled);
-            aMapPlatformView.getMapController().setZoomGesturesEnabled(zoomGesturesEnabled);
 
-
+            ConvertUtil.clearLruCache();
             if (null != initialMarkers) {
                 List<Object> markerList = (List<Object>) initialMarkers;
                 aMapPlatformView.getMarkersController().addByList(markerList);
@@ -174,8 +175,7 @@ class AMapOptionsBuilder implements AMapOptionsSink {
 
     @Override
     public void setZoomGesturesEnabled(boolean zoomGesturesEnabled) {
-        this.zoomGesturesEnabled = zoomGesturesEnabled;
-//        options.zoomGesturesEnabled(zoomGesturesEnabled);
+        options.zoomGesturesEnabled(zoomGesturesEnabled);
     }
 
     @Override
