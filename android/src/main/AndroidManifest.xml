@@ -1,3 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.amap.flutter.amap_flutter_map">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.amap.flutter.amap_flutter_map">
+   <application>
+
+       <!-- 定位需要的服务 -->
+       <service
+           android:name="com.amap.api.location.APSService" />
+   </application>
 </manifest>

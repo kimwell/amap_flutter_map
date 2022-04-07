@@ -57,6 +57,7 @@ class AMapPlatformViewFactory extends PlatformViewFactory {
             if (params.containsKey("markersToAdd")) {
                 builder.setInitialMarkers(params.get("markersToAdd"));
             }
+
             if (params.containsKey("polylinesToAdd")) {
                 builder.setInitialPolylines(params.get("polylinesToAdd"));
             }
@@ -65,6 +66,9 @@ class AMapPlatformViewFactory extends PlatformViewFactory {
                 builder.setInitialPolygons(params.get("polygonsToAdd"));
             }
 
+            if (params.containsKey("circlesToAdd")) {
+                builder.setInitialGeoFence(params.get("circlesToAdd"));
+            }
 
             if (params.containsKey("apiKey")) {
                 ConvertUtil.checkApiKey(params.get("apiKey"));

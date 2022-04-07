@@ -8,6 +8,9 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="amap_flutter_map_example">
+
+        <service
+            android:name="com.amap.api.location.APSService" />
         <!--        <meta-data-->
         <!--            android:name="com.amap.api.v2.apikey"-->
         <!--            android:value="您申请的key" />-->

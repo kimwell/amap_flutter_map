@@ -2,7 +2,6 @@ package com.amap.flutter.map;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.TextureMapView;
 import com.amap.flutter.map.core.MapController;
+import com.amap.flutter.map.overlays.geofence.GeoFencesController;
 import com.amap.flutter.map.overlays.marker.MarkersController;
 import com.amap.flutter.map.overlays.polygon.PolygonsController;
 import com.amap.flutter.map.overlays.polyline.PolylinesController;
@@ -49,6 +49,7 @@ public class AMapPlatformView
     private MarkersController markersController;
     private PolylinesController polylinesController;
     private PolygonsController polygonsController;
+    private GeoFencesController geoFencesController;
 
     private TextureMapView mapView;
 
@@ -73,6 +74,7 @@ public class AMapPlatformView
             markersController = new MarkersController(methodChannel, amap, context);
             polylinesController = new PolylinesController(methodChannel, amap, context);
             polygonsController = new PolygonsController(methodChannel, amap, context);
+            geoFencesController = new GeoFencesController(methodChannel, amap, context);
             initMyMethodCallHandlerMap();
             lifecycleProvider.getLifecycle().addObserver((LifecycleObserver) this);
         } catch (Throwable e) {
@@ -108,6 +110,13 @@ public class AMapPlatformView
                 myMethodCallHandlerMap.put(methodId, polygonsController);
             }
         }
+
+        methodIdArray = geoFencesController.getRegisterMethodIdArray();
+        if (null != methodIdArray && methodIdArray.length > 0) {
+            for (String methodId : methodIdArray) {
+                myMethodCallHandlerMap.put(methodId, geoFencesController);
+            }
+        }
     }
 
 
@@ -125,6 +134,10 @@ public class AMapPlatformView
 
     public PolygonsController getPolygonsController() {
         return polygonsController;
+    }
+
+    public GeoFencesController getGeoFenceController() {
+        return geoFencesController;
     }
 
 

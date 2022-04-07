@@ -1,16 +1,16 @@
 import 'dart:typed_data';
 
 import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map_example/base_page.dart';
 import 'package:amap_flutter_map_example/const_config.dart';
 import 'package:amap_flutter_map_example/widgets/amap_switch_button.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
-import 'package:amap_flutter_map/amap_flutter_map.dart';
 
 class AllMapConfigDemoPage extends BasePage {
   AllMapConfigDemoPage(String title, String subTitle) : super(title, subTitle);
+
   @override
   Widget build(BuildContext context) {
     return _MapUiBody();
@@ -69,6 +69,7 @@ class _MapUiBodyState extends State<_MapUiBody> {
   ///自定义定位小蓝点
   MyLocationStyleOptions _myLocationStyleOptions =
       MyLocationStyleOptions(false);
+
   @override
   void initState() {
     super.initState();
@@ -108,6 +109,7 @@ class _MapUiBodyState extends State<_MapUiBody> {
       customStyleOptions: _customStyleOptions,
       myLocationStyleOptions: _myLocationStyleOptions,
       onLocationChanged: _onLocationChanged,
+      onGeoFeoReceived: _onGeoFeoReceived,
       onCameraMove: _onCameraMove,
       onCameraMoveEnd: _onCameraMoveEnd,
       onTap: _onMapTap,
@@ -407,6 +409,13 @@ class _MapUiBodyState extends State<_MapUiBody> {
       return;
     }
     print('_onLocationChanged ${location.toJson()}');
+  }
+
+  void _onGeoFeoReceived(Map json) {
+    if (null == json) {
+      return;
+    }
+    print('_onGeoFeoReceived ${json}');
   }
 
   void _onCameraMove(CameraPosition cameraPosition) {

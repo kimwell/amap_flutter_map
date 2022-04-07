@@ -57,6 +57,17 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     );
   }
 
+  /// 更新Circle的数据
+  Future<void> updateCircles(
+    CircleUpdates circleUpdates, {
+    required int mapId,
+  }) {
+    return channel(mapId).invokeMethod<void>(
+      'circles#update',
+      circleUpdates.toMap(),
+    );
+  }
+
   /// 更新polyline的数据
   Future<void> updatePolylines(
     PolylineUpdates polylineUpdates, {
@@ -125,6 +136,11 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     return _events(mapId).whereType<LocationChangedEvent>();
   }
 
+  //围栏回调
+  Stream<MapCircleEvent> onGeoFeoReceived({required int mapId}) {
+    return _events(mapId).whereType<MapCircleEvent>();
+  }
+
   //Camera 移动回调
   Stream<CameraPositionMoveEvent> onCameraMove({required int mapId}) {
     return _events(mapId).whereType<CameraPositionMoveEvent>();
@@ -187,8 +203,8 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
         }
         break;
       case 'map#onTap':
-        _mapEventStreamController
-            .add(MapTapEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
+        _mapEventStreamController.add(
+            MapTapEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
         break;
       case 'map#onLongPress':
         _mapEventStreamController.add(MapLongPressEvent(
@@ -213,8 +229,15 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
         break;
       case 'map#onPoiTouched':
         try {
-          _mapEventStreamController.add(
-              MapPoiTouchEvent(mapId, AMapPoi.fromJson(call.arguments['poi'])!));
+          _mapEventStreamController.add(MapPoiTouchEvent(
+              mapId, AMapPoi.fromJson(call.arguments['poi'])!));
+        } catch (e) {
+          print('map#onPoiTouched error===>' + e.toString());
+        }
+        break;
+      case 'geoFence#receive':
+        try {
+          _mapEventStreamController.add(MapCircleEvent(mapId, call.arguments));
         } catch (e) {
           print('map#onPoiTouched error===>' + e.toString());
         }
@@ -271,4 +294,15 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }) {
     return channel(mapId).invokeMethod<void>('map#clearDisk');
   }
+
+  Future<void> clearCicle({
+    required int mapId,
+  }) {
+    return channel(mapId).invokeMethod<void>('geoFence#clearCicle');
+  }
+
+// void setMethodCallHandler(
+//     int mapId, Future<dynamic> Function(MethodCall call) handler) {
+//   channel(mapId).setMethodCallHandler(handler);
+// }
 }

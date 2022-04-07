@@ -75,3 +75,8 @@ class PolylineTapEvent extends MapEvent<String> {
 class MapPoiTouchEvent extends MapEvent<AMapPoi> {
   MapPoiTouchEvent(int mapId, AMapPoi poi) : super(mapId, poi);
 }
+
+/// 围栏回调事件
+class MapCircleEvent extends MapEvent<Map> {
+  MapCircleEvent(int mapId, Map json) : super(mapId, json);
+}

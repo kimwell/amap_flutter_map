@@ -166,7 +166,7 @@ public class MapController
         }
         if (LogUtil.isDebugMode && !hasStarted) {
             hasStarted = true;
-            int index = myArray[0];
+//            int index = myArray[0];
         }
     }
 
@@ -366,6 +366,11 @@ public class MapController
 
     @Override
     public void setInitialPolygons(Object polygonsObject) {
+        //不实现
+    }
+
+    @Override
+    public void setInitialGeoFence(Object geoFenceObject) {
         //不实现
     }
 

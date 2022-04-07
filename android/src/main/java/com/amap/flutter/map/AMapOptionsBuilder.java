@@ -47,6 +47,8 @@ class AMapOptionsBuilder implements AMapOptionsSink {
 
     private Object initialPolygons;
 
+    private Object initialGeoFence;
+
     AMapPlatformView build(int id,
                            Context context,
                            BinaryMessenger binaryMessenger,
@@ -100,6 +102,12 @@ class AMapOptionsBuilder implements AMapOptionsSink {
                 List<Object> polygonList = (List<Object>) initialPolygons;
                 aMapPlatformView.getPolygonsController().addByList(polygonList);
             }
+
+            if (null != initialGeoFence) {
+                List<Object> geoFenceList = (List<Object>) initialGeoFence;
+                aMapPlatformView.getGeoFenceController().addByList(geoFenceList);
+            }
+
             return aMapPlatformView;
         } catch (Throwable e) {
             LogUtil.e(CLASS_NAME, "build", e);
@@ -212,6 +220,11 @@ class AMapOptionsBuilder implements AMapOptionsSink {
     @Override
     public void setInitialPolygons(Object polygonsObject) {
         this.initialPolygons = polygonsObject;
+    }
+
+    @Override
+    public void setInitialGeoFence(Object geoFenceObject) {
+        this.initialGeoFence = geoFenceObject;
     }
 
 
